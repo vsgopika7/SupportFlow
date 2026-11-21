@@ -1,0 +1,120 @@
+/* Customer management card */
+.customer-management-card {
+  overflow: hidden;
+}
+
+/* Customer table */
+.customer-table {
+  width: 100%;
+  min-width: 1050px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.customer-table th,
+.customer-table td {
+  padding: 14px 16px !important;
+  vertical-align: middle;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.customer-table th {
+  font-weight: 600;
+  font-size: 14px;
+  color: #495057;
+  background-color: #f8f9fa;
+  white-space: nowrap;
+}
+
+/* Name */
+.customer-table th:nth-child(1),
+.customer-table td:nth-child(1) {
+  width: 19%;
+}
+
+/* Email */
+.customer-table th:nth-child(2),
+.customer-table td:nth-child(2) {
+  width: 24%;
+}
+
+/* Phone */
+.customer-table th:nth-child(3),
+.customer-table td:nth-child(3) {
+  width: 17%;
+}
+
+/* Company */
+.customer-table th:nth-child(4),
+.customer-table td:nth-child(4) {
+  width: 19%;
+}
+
+/* Total tickets */
+.customer-table th:nth-child(5),
+.customer-table td:nth-child(5) {
+  width: 11%;
+  text-align: center;
+}
+
+/* Actions */
+.customer-table th:nth-child(6),
+.customer-table td:nth-child(6) {
+  width: 10%;
+  text-align: center;
+}
+
+.customer-table td {
+  overflow-wrap: break-word;
+}
+
+.customer-name {
+  font-weight: 600;
+}
+
+.customer-table tbody tr:hover {
+  background-color: #f8faff;
+}
+
+/* Ticket count badge */
+.customer-ticket-badge {
+  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: 20px;
+}
+
+/* Modal backdrop */
+.customer-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.customer-modal-backdrop .modal {
+  position: static;
+  overflow-y: auto;
+}
+
+.customer-modal-content {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .customer-management-card {
+    padding: 16px !important;
+  }
+
+  .customer-modal-backdrop .modal-dialog {
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+  }
+}

@@ -1,0 +1,470 @@
+/* ================================
+   Agents Page
+================================ */
+.agents-page {
+  width: 100%;
+}
+
+/* ================================
+   Summary Cards
+================================ */
+.agent-stat-card {
+  border: 1px solid #e9edf3;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.agent-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.06);
+}
+
+.agent-stat-card .card-body {
+  padding: 20px;
+}
+
+.agent-stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.agent-stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.agent-stat-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 17px;
+}
+
+.agent-icon-blue {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.agent-icon-green {
+  color: #16a34a;
+  background: #f0fdf4;
+}
+
+.agent-icon-orange {
+  color: #ea580c;
+  background: #fff7ed;
+}
+
+.agent-icon-purple {
+  color: #7c3aed;
+  background: #f5f3ff;
+}
+
+.agent-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #172033;
+  margin: 14px 0 4px;
+}
+
+.agent-stat-note {
+  color: #94a3b8;
+  font-size: 12px;
+  margin-bottom: 0;
+}
+
+/* ================================
+   Agent Management Card
+================================ */
+.agent-management-card {
+  border: 1px solid #e9edf3;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.agent-management-header {
+  padding: 20px 22px 12px;
+}
+
+.agent-management-header h5 {
+  font-weight: 600;
+  color: #172033;
+}
+
+/* ================================
+   Toolbar
+================================ */
+.agent-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px 20px;
+}
+
+.agent-search {
+  position: relative;
+  flex: 1;
+}
+
+.agent-search i {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.agent-search input {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #dfe5ec;
+  border-radius: 8px;
+  padding: 8px 12px 8px 38px;
+  outline: none;
+  font-size: 14px;
+}
+
+.agent-search input:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.agent-status-filter {
+  width: 160px;
+  height: 42px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* ================================
+   Agent Table
+================================ */
+.agent-table {
+  width: 100%;
+  min-width: 1150px;
+  table-layout: fixed;
+  margin-bottom: 0;
+  border-collapse: collapse;
+}
+
+.agent-table th,
+.agent-table td {
+  padding: 15px 18px !important;
+  vertical-align: middle;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.agent-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.agent-table th:nth-child(1),
+.agent-table td:nth-child(1) {
+  width: 24%;
+}
+
+.agent-table th:nth-child(2),
+.agent-table td:nth-child(2) {
+  width: 17%;
+}
+
+.agent-table th:nth-child(3),
+.agent-table td:nth-child(3) {
+  width: 16%;
+}
+
+.agent-table th:nth-child(4),
+.agent-table td:nth-child(4) {
+  width: 11%;
+}
+
+.agent-table th:nth-child(5),
+.agent-table td:nth-child(5) {
+  width: 12%;
+}
+
+.agent-table th:nth-child(6),
+.agent-table td:nth-child(6) {
+  width: 10%;
+}
+
+.agent-table th:nth-child(7),
+.agent-table td:nth-child(7) {
+  width: 10%;
+}
+
+.agent-table tbody tr:hover {
+  background: #f8faff;
+}
+
+/* ================================
+   Agent Profile
+================================ */
+.agent-profile-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.agent-avatar {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: #eaf2ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.agent-profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.agent-profile-name {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.agent-profile-email {
+  color: #94a3b8;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* ================================
+   Department
+================================ */
+.agent-department {
+  color: #475569;
+  font-size: 13px;
+}
+
+/* ================================
+   Status Badges
+================================ */
+.agent-status-badge,
+.agent-workload-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.agent-status-active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.agent-status-inactive {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* ================================
+   Ticket Count
+================================ */
+.agent-ticket-count {
+  font-weight: 600;
+  color: #334155;
+  font-size: 14px;
+}
+
+/* ================================
+   Workload
+================================ */
+.workload-none {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.workload-low {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.workload-medium {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.workload-high {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ================================
+   Action Buttons
+================================ */
+.agent-actions-cell {
+  min-width: 130px;
+}
+
+.agent-actions-cell .btn {
+  white-space: nowrap;
+}
+
+/* ================================
+   Table Footer
+================================ */
+.agent-table-footer {
+  padding: 14px 22px;
+  font-size: 13px;
+  color: #64748b;
+  border-top: 1px solid #edf0f4;
+}
+
+/* ================================
+   Modal Backdrop
+================================ */
+.agent-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  padding: 20px;
+}
+
+/* ================================
+   Modal Container
+================================ */
+.agent-modal {
+  background: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Modal Header */
+.agent-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.agent-modal-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Modal Body */
+.agent-modal-body {
+  padding: 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Modal Footer */
+.agent-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Form Labels */
+.agent-modal .form-label {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+/* Form Inputs */
+.agent-modal .form-control,
+.agent-modal .form-select {
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+/* Validation Errors */
+.agent-modal .invalid-feedback {
+  font-size: 13px;
+}
+
+/* ================================
+   Responsive
+================================ */
+@media (max-width: 768px) {
+  .agent-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px 18px;
+  }
+
+  .agent-status-filter {
+    width: 100%;
+  }
+
+  .agent-management-header {
+    padding: 18px 16px 10px;
+  }
+
+  .agent-table th,
+  .agent-table td {
+    padding: 12px !important;
+  }
+
+  .agent-modal-backdrop {
+    padding: 12px;
+  }
+
+  .agent-modal-header,
+  .agent-modal-footer {
+    padding: 16px;
+  }
+
+  .agent-modal-body {
+    padding: 18px;
+  }
+}/* Keep agent action buttons in one row */
+.agent-actions-cell {
+  min-width: 145px;
+}
+
+.agent-actions-cell > div {
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+}
+
+.agent-actions-cell .btn {
+  flex-shrink: 0;
+}
+
+/* Give the Actions column more space */
+.agent-table th:nth-child(7),
+.agent-table td:nth-child(7) {
+  width: 12%;
+}

@@ -1,0 +1,21 @@
+.ticket-description-section {
+  margin-top: 24px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.ticket-description-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1f2937;
+}
+
+.ticket-description-section p {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
