@@ -2,7 +2,7 @@ import PageHeader from '../../components/common/PageHeader'
 import { initialCustomers } from '../../data/customers'
 import type { Customer } from '../../types/Customer'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import React, { useState } from 'react'
+import React, { useState,useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { validateCustomerForm } from '../../utils/customerValidation'
 import type { CustomerFormErrors } from '../../utils/customerValidation'
@@ -34,11 +34,17 @@ function Customers() {
   const [successMessage, setSuccessMessage] = useState('')
 
   // Search customers
-  const filteredCustomers = customers.filter((customer) =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.company.toLowerCase().includes(searchTerm.toLowerCase())
+  // Search customers
+const filteredCustomers = useMemo(() => {
+  const search = searchTerm.toLowerCase()
+
+  return customers.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(search) ||
+      customer.email.toLowerCase().includes(search) ||
+      customer.company.toLowerCase().includes(search)
   )
+}, [customers, searchTerm])
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

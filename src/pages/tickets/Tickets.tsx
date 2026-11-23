@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import './Tickets.css'
 import StatusBadge from '../../components/ui/StatusBadge'
 import PriorityBadge from '../../components/ui/PriorityBadge'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import type { Ticket } from '../../types/Ticket'
 import { initialTickets } from '../../data/tickets'
@@ -54,11 +54,12 @@ function Tickets() {
   const { user } = useAuth()
 
   // Find the logged-in agent using their email
-  const loggedInAgent = agents.find(
-    agent =>
-      user?.email &&
-      agent.email.toLowerCase() === user.email.toLowerCase()
-  )
+  const loggedInAgent = useMemo(() => {
+    return agents.find((agent) =>
+        user?.email &&
+        agent.email.toLowerCase() === user.email.toLowerCase()
+    )
+  }, [agents, user?.email])
 
   // Determine permissions
   const isAdmin = user?.role === 'Admin'
@@ -85,45 +86,45 @@ function Tickets() {
     return false
   }
   // Filter tickets based on user role
-  const roleFilteredTickets = tickets.filter(ticket => {
-    if (!user) return false
-
-    // Admin can see all tickets
-    if (isAdmin) {
-      return true
-    }
-
-    // Agent can see tickets assigned to their agent profile
-    if (isAgent) {
-      const agentName = loggedInAgent?.name || user.name
-      return ticket.assignedAgent === agentName
-    }
-
-    // Customer can see only their own tickets
-    if (isCustomer) {
-      return ticket.customer === user.name
-    }
-
-    return false
-  })
+  const roleFilteredTickets = useMemo(() => {
+    return tickets.filter(ticket => {
+      if (!user) return false
+      // Admin can see all tickets
+      if (isAdmin) {
+        return true
+      }
+      // Agent can see tickets assigned to their agent profile
+      if (isAgent) {
+        const agentName = loggedInAgent?.name || user.name
+        return ticket.assignedAgent === agentName
+      }
+      // Customer can see only their own tickets
+      if (isCustomer) {
+        return ticket.customer === user.name
+      }
+      return false
+    })
+  }, [tickets, user, isAdmin, isAgent, isCustomer, loggedInAgent])
 
   // Apply search, status and priority filters
-  const filteredTickets = roleFilteredTickets.filter(ticket => {
-    const matchesSearch =
-      ticket.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.assignedAgent.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ticket.id.toString().includes(searchTerm)
+  const filteredTickets = useMemo(() => {
+    return roleFilteredTickets.filter(ticket => {
+      const matchesSearch =
+        ticket.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ticket.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ticket.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ticket.assignedAgent.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ticket.id.toString().includes(searchTerm)
 
-    const matchesStatus =
-      statusFilter === 'All' || ticket.status === statusFilter
+      const matchesStatus =
+        statusFilter === 'All' || ticket.status === statusFilter
 
-    const matchesPriority =
-      priorityFilter === 'All' || ticket.priority === priorityFilter
+      const matchesPriority =
+        priorityFilter === 'All' || ticket.priority === priorityFilter
 
-    return matchesSearch && matchesStatus && matchesPriority
-  })
+      return matchesSearch && matchesStatus && matchesPriority
+    })
+  }, [roleFilteredTickets, searchTerm, statusFilter, priorityFilter])
 
   // Form validation
   const validateForm = () => {
@@ -287,11 +288,13 @@ function Tickets() {
   }
 
   // Get active agents belonging to the selected department
-  const availableAgents = agents.filter(
+  const availableAgents = useMemo(()=>{
+    return agents.filter(
     agent =>
       agent.status === 'Active' &&
       agent.department === formData.category
   )
+  },[agents,formData.category])
 
   return (
     <div className="tickets-page">

@@ -6,6 +6,7 @@ import {
   CheckCircle,
   AlertTriangle,
 } from 'lucide-react'
+import { useMemo } from 'react'
 import PageHeader from '../../components/common/PageHeader'
 import StatCard from '../../components/common/StatCard'
 import StatusBadge from '../../components/ui/StatusBadge'
@@ -32,62 +33,89 @@ function Dashboard() {
   const { user } = useAuth()
 
   // Find logged-in agent profile
-  const loggedInAgent = agents.find(
-    agent =>
-      user?.email &&
-      agent.email.toLowerCase() === user.email.toLowerCase()
-  )
-
+  const loggedInAgent = useMemo(() => {
+    return agents.find(
+      agent =>
+        user?.email &&
+        agent.email.toLowerCase() === user.email.toLowerCase()
+    )
+  }, [agents, user?.email])
   // Filter tickets based on role
-  const visibleTickets = tickets.filter(ticket => {
-    if (!user) return false
+  const visibleTickets = useMemo(() => {
+    return tickets.filter(ticket => {
+      if (!user) return false
 
-    if (user.role === 'Admin') {
-      return true
-    }
-
-    if (user.role === 'Agent') {
-      const agentName = loggedInAgent?.name || user.name
-      return ticket.assignedAgent === agentName
-    }
-
-    if (user.role === 'Customer') {
-      return ticket.customer === user.name
-    }
-
-    return false
-  })
+      if (user.role === 'Admin') {
+        return true
+      }
+      if (user.role === 'Agent') {
+        const agentName = loggedInAgent?.name || user.name
+        return ticket.assignedAgent === agentName
+      }
+      if (user.role === 'Customer') {
+        return ticket.customer === user.name
+      }
+      return false
+    })
+  }, [tickets, user, loggedInAgent])
 
   // Calculate stats from role-filtered tickets
-  const totalTickets = visibleTickets.length
+  // Calculate dashboard statistics efficiently
+  const ticketStats = useMemo(() => {
+    return visibleTickets.reduce(
+      (stats, ticket) => {
+        stats.total++
 
-  const openTickets = visibleTickets.filter(
-    ticket => ticket.status === 'Open'
-  ).length
+        switch (ticket.status) {
+          case 'Open':
+            stats.open++
+            break
+          case 'In Progress':
+            stats.inProgress++
+            break
+          case 'Resolved':
+            stats.resolved++
+            break
+          case 'Assigned':
+            stats.assigned++
+            break
+          case 'Waiting for Customer':
+            stats.waiting++
+            break
+          case 'Closed':
+            stats.closed++
+            break
+        }
 
-  const inProgressTickets = visibleTickets.filter(
-    ticket => ticket.status === 'In Progress'
-  ).length
+        if (ticket.priority === 'High') {
+          stats.highPriority++
+        }
 
-  const resolvedTickets = visibleTickets.filter(
-    ticket => ticket.status === 'Resolved'
-  ).length
+        return stats
+      },
+      {
+        total: 0,
+        open: 0,
+        inProgress: 0,
+        resolved: 0,
+        highPriority: 0,
+        assigned: 0,
+        waiting: 0,
+        closed: 0,
+      }
+    )
+  }, [visibleTickets])
 
-  const highPriorityTickets = visibleTickets.filter(
-    ticket => ticket.priority === 'High'
-  ).length
-
-  const assignedTickets = visibleTickets.filter(
-    ticket => ticket.status === 'Assigned'
-  ).length
-
-  const waitingTickets = visibleTickets.filter(
-    ticket => ticket.status === 'Waiting for Customer'
-  ).length
-
-  const closedTickets = visibleTickets.filter(
-    ticket => ticket.status === 'Closed'
-  ).length
+  const {
+    total: totalTickets,
+    open: openTickets,
+    inProgress: inProgressTickets,
+    resolved: resolvedTickets,
+    highPriority: highPriorityTickets,
+    assigned: assignedTickets,
+    waiting: waitingTickets,
+    closed: closedTickets,
+  } = ticketStats
 
   return (
     <div>

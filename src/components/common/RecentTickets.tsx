@@ -3,14 +3,17 @@ import StatusBadge from '../ui/StatusBadge'
 import PriorityBadge from '../ui/PriorityBadge'
 import { Link } from 'react-router-dom'
 import type { Ticket } from '../../types/Ticket'
+import { useMemo } from 'react'
 
 interface RecentTicketsProps {
     tickets: Ticket[]
 }
 function RecentTickets({ tickets }: RecentTicketsProps) {
-    const recentTickets = [...tickets]
+   const recentTickets = useMemo(() => {
+    return [...tickets]
         .sort((a, b) => b.id - a.id)
         .slice(0, 5)
+}, [tickets])
     return (
         <div className="recent-tickets">
             <div className="recent-tickets-header">

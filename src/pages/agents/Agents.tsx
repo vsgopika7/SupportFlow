@@ -6,7 +6,7 @@ import type { Ticket } from '../../types/Ticket'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import type { Notification } from '../../types/Notification'
 import { addNotification } from '../../utils/notificationStorage'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   validateAgentForm,
   type AgentFormErrors,
@@ -52,13 +52,44 @@ function Agents() {
   const [selectedAgentId, setSelectedAgentId] = useState('')
 
   // Calculate assigned ticket count directly from tickets
+  // Calculate ticket counts for all agents in one pass
+  const assignedTicketCounts = useMemo(() => {
+    return tickets.reduce((counts, ticket) => {
+      if (
+        ticket.assignedAgent &&
+        ticket.assignedAgent !== 'Unassigned'
+      ) {
+        counts.set(
+          ticket.assignedAgent,
+          (counts.get(ticket.assignedAgent) || 0) + 1
+        )
+      }
+      return counts
+    }, new Map<string, number>())
+  }, [tickets])
   const getAssignedCount = (agentName: string) =>
-    tickets.filter((ticket) => ticket.assignedAgent === agentName).length
+    assignedTicketCounts.get(agentName) || 0
 
   // Summary calculations
-  const totalAgents = agents.length
-  const activeAgents = agents.filter((agent) => agent.status === 'Active').length
-  const inactiveAgents = agents.filter((agent) => agent.status === 'Inactive').length
+  const agentStats = useMemo(() => {
+    return agents.reduce(
+      (stats, agent) => {
+        stats.total++
+        if (agent.status === 'Active') {
+          stats.active++
+        } else if (agent.status === 'Inactive') {
+          stats.inactive++
+        }
+        return stats
+      },
+      { total: 0, active: 0, inactive: 0 }
+    )
+  }, [agents])
+  const {
+    total: totalAgents,
+    active: activeAgents,
+    inactive: inactiveAgents,
+  } = agentStats
 
   const totalAssignedTickets = tickets.filter(
     (ticket) =>
@@ -67,20 +98,21 @@ function Agents() {
   ).length
 
   // Search and status filtering
-  const filteredAgents = agents.filter((agent) => {
-    const search = searchTerm.toLowerCase()
+ const filteredAgents = useMemo(() => {
+  const search = searchTerm.toLowerCase()
 
+  return agents.filter((agent) => {
     const matchesSearch =
       agent.name.toLowerCase().includes(search) ||
       agent.email.toLowerCase().includes(search) ||
       agent.department.toLowerCase().includes(search) ||
       agent.role.toLowerCase().includes(search)
-
+      
     const matchesStatus =
       statusFilter === 'All' || agent.status === statusFilter
-
     return matchesSearch && matchesStatus
   })
+}, [agents, searchTerm, statusFilter])
 
   // Workload label
   const getWorkloadLabel = (count: number) => {
@@ -178,12 +210,12 @@ function Agents() {
         prev.map((agent) =>
           agent.id === editingAgent.id
             ? {
-                ...agent,
-                name: newName,
-                email: formData.email.trim(),
-                role: formData.role.trim(),
-                department: formData.department.trim(),
-              }
+              ...agent,
+              name: newName,
+              email: formData.email.trim(),
+              role: formData.role.trim(),
+              department: formData.department.trim(),
+            }
             : agent
         )
 
@@ -228,9 +260,9 @@ function Agents() {
       prev.map((agent) =>
         agent.id === agentId
           ? {
-              ...agent,
-              status: agent.status === 'Active' ? 'Inactive' : 'Active',
-            }
+            ...agent,
+            status: agent.status === 'Active' ? 'Inactive' : 'Active',
+          }
           : agent
       )
     )
@@ -265,64 +297,64 @@ function Agents() {
 
   // Assign/reassign ticket
   const handleAssignTicket = () => {
-  if (!selectedTicketId || !selectedAgentId) {
-    toast.error('Please select a ticket and an agent')
-    return
-  }
+    if (!selectedTicketId || !selectedAgentId) {
+      toast.error('Please select a ticket and an agent')
+      return
+    }
 
-  const selectedAgent = agents.find(
-    (agent) => agent.id === Number(selectedAgentId)
-  )
+    const selectedAgent = agents.find(
+      (agent) => agent.id === Number(selectedAgentId)
+    )
 
-  if (!selectedAgent) {
-    toast.error('Agent not found')
-    return
-  }
+    if (!selectedAgent) {
+      toast.error('Agent not found')
+      return
+    }
 
-  const ticketId = Number(selectedTicketId)
+    const ticketId = Number(selectedTicketId)
 
-  const assignedTicket = tickets.find(
-    (ticket) => ticket.id === ticketId
-  )
+    const assignedTicket = tickets.find(
+      (ticket) => ticket.id === ticketId
+    )
 
-  if (!assignedTicket) {
-    toast.error('Ticket not found')
-    return
-  }
+    if (!assignedTicket) {
+      toast.error('Ticket not found')
+      return
+    }
 
-  // Update ticket assignment
-  setTickets((prev) =>
-    prev.map((ticket) =>
-      ticket.id === ticketId
-        ? {
+    // Update ticket assignment
+    setTickets((prev) =>
+      prev.map((ticket) =>
+        ticket.id === ticketId
+          ? {
             ...ticket,
             assignedAgent: selectedAgent.name,
             status: 'Assigned',
           }
-        : ticket
+          : ticket
+      )
     )
-  )
 
-  // Notify the assigned Agent
-  const notification: Notification = {
-    id: `notif-${Date.now()}`,
-    title: 'Ticket Assigned to You',
-    message: `Ticket #${assignedTicket.id} — ${assignedTicket.subject} has been assigned to you.`,
-    ticketId: assignedTicket.id,
-    type: 'assigned',
-    createdAt: new Date().toISOString(),
-    read: false,
-    recipientRole: 'Agent',
-    recipientAgent: selectedAgent.name,
+    // Notify the assigned Agent
+    const notification: Notification = {
+      id: `notif-${Date.now()}`,
+      title: 'Ticket Assigned to You',
+      message: `Ticket #${assignedTicket.id} — ${assignedTicket.subject} has been assigned to you.`,
+      ticketId: assignedTicket.id,
+      type: 'assigned',
+      createdAt: new Date().toISOString(),
+      read: false,
+      recipientRole: 'Agent',
+      recipientAgent: selectedAgent.name,
+    }
+
+    addNotification(notification)
+
+    toast.success(`Ticket assigned to ${selectedAgent.name}`)
+
+    setSelectedTicketId('')
+    setSelectedAgentId('')
   }
-
-  addNotification(notification)
-
-  toast.success(`Ticket assigned to ${selectedAgent.name}`)
-
-  setSelectedTicketId('')
-  setSelectedAgentId('')
-}
 
   return (
     <div className="agents-page">
@@ -508,11 +540,10 @@ function Agents() {
 
                       <td>
                         <span
-                          className={`agent-status-badge ${
-                            agent.status === 'Active'
-                              ? 'agent-status-active'
-                              : 'agent-status-inactive'
-                          }`}
+                          className={`agent-status-badge ${agent.status === 'Active'
+                            ? 'agent-status-active'
+                            : 'agent-status-inactive'
+                            }`}
                         >
                           {agent.status}
                         </span>
@@ -545,11 +576,10 @@ function Agents() {
                           </button>
 
                           <button
-                            className={`btn btn-sm ${
-                              agent.status === 'Active'
-                                ? 'btn-outline-danger'
-                                : 'btn-outline-success'
-                            }`}
+                            className={`btn btn-sm ${agent.status === 'Active'
+                              ? 'btn-outline-danger'
+                              : 'btn-outline-success'
+                              }`}
                             onClick={() => handleToggleStatus(agent.id)}
                             title={
                               agent.status === 'Active'
@@ -558,11 +588,10 @@ function Agents() {
                             }
                           >
                             <i
-                              className={`bi ${
-                                agent.status === 'Active'
-                                  ? 'bi-person-dash'
-                                  : 'bi-person-check'
-                              }`}
+                              className={`bi ${agent.status === 'Active'
+                                ? 'bi-person-dash'
+                                : 'bi-person-check'
+                                }`}
                             ></i>
                           </button>
 
@@ -614,9 +643,8 @@ function Agents() {
                   <input
                     type="text"
                     name="name"
-                    className={`form-control ${
-                      formErrors.name ? 'is-invalid' : ''
-                    }`}
+                    className={`form-control ${formErrors.name ? 'is-invalid' : ''
+                      }`}
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Enter agent name"
@@ -632,9 +660,8 @@ function Agents() {
                   <input
                     type="email"
                     name="email"
-                    className={`form-control ${
-                      formErrors.email ? 'is-invalid' : ''
-                    }`}
+                    className={`form-control ${formErrors.email ? 'is-invalid' : ''
+                      }`}
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="agent@supportflow.com"
@@ -650,9 +677,8 @@ function Agents() {
                   <input
                     type="text"
                     name="role"
-                    className={`form-control ${
-                      formErrors.role ? 'is-invalid' : ''
-                    }`}
+                    className={`form-control ${formErrors.role ? 'is-invalid' : ''
+                      }`}
                     value={formData.role}
                     onChange={handleInputChange}
                     placeholder="Support Agent"
@@ -668,9 +694,8 @@ function Agents() {
                   <input
                     type="text"
                     name="department"
-                    className={`form-control ${
-                      formErrors.department ? 'is-invalid' : ''
-                    }`}
+                    className={`form-control ${formErrors.department ? 'is-invalid' : ''
+                      }`}
                     value={formData.department}
                     onChange={handleInputChange}
                     placeholder="Technical Support"
