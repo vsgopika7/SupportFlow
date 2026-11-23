@@ -1,75 +1,213 @@
-# React + TypeScript + Vite
+# 🎫 SupportFlow — Customer Support Operations Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A role-based customer support operations platform built with **React 19, TypeScript, and Vite** to streamline ticket management, customer tracking, and support agent workflows.
 
-Currently, two official plugins are available:
+<p align="center">
+  <a href="https://support-flow-app.vercel.app">
+    <img src="https://img.shields.io/badge/Live_Demo-Visit_App-2563EB?style=for-the-badge" />
+  </a>
+  <a href="https://github.com/vsgopika7/SupportFlow">
+    <img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github" />
+  </a>
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🔗 **[View SupportFlow Live](https://support-flow-app.vercel.app)**
 
-## Expanding the ESLint configuration
+📂 **[View Source Code on GitHub](https://github.com/vsgopika7/SupportFlow)**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📌 Overview
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+SupportFlow is a frontend customer support management application designed to organize support tickets and simplify the workflow between administrators, support agents, and customers.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The platform provides role-based dashboards and tools for managing tickets, tracking their status, assigning agents, and maintaining customer and agent information.
 
+---
+
+## ✨ Features
+
+- **Role-Based Access** — Separate access for Admin, Agent, and Customer roles.
+- **Dashboard** — Overview of ticket statistics and support operations.
+- **Ticket Management** — Create, view, and manage support tickets.
+- **Ticket Assignment** — Assign tickets to support agents.
+- **Status Tracking** — Track tickets through Open, Assigned, In Progress, Waiting for Customer, Resolved, and Closed statuses.
+- **Priority Management** — Organize tickets according to priority.
+- **Customer Management** — View and manage customer information.
+- **Agent Management** — Manage support agents and their availability.
+- **Search & Filtering** — Find tickets and filter records.
+- **Protected Routes** — Restrict application routes based on authentication.
+- **Persistent Storage** — Store application data using browser Local Storage.
+- **Optimized Loading** — Lazy-load page components using React's `lazy` and `Suspense`.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| React 19 | UI development |
+| TypeScript | Type safety |
+| Vite | Development server and build tool |
+| React Router | Routing and navigation |
+| Bootstrap | Styling and responsive layout |
+| React Hot Toast | Notifications |
+| Lucide React | Icons |
+| Local Storage | Client-side data persistence |
+
+---
+
+## 👥 User Roles
+
+### Admin
+- Monitor support tickets
+- Assign tickets to agents
+- Manage customers and agents
+- Monitor ticket statuses
+
+### Agent
+- View assigned tickets
+- Update ticket status
+- Work on customer support requests
+
+### Customer
+- Create support tickets
+- View their tickets
+- Track ticket progress
+
+---
+
+## 🔄 Ticket Workflow
+
+```text
+Ticket Creation
+      ↓
+     Open
+      ↓
+Admin Assigns Agent
+      ↓
+   Assigned
+      ↓
+  In Progress
+      ↓
+Waiting for Customer (when needed)
+      ↓
+   Resolved
+      ↓
+    Closed
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📂 Project Structure
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```text
+src/
+├── components/
+│   ├── auth/
+│   ├── layout/
+│   └── ui/
+├── context/
+├── hooks/
+├── pages/
+│   ├── agents/
+│   ├── auth/
+│   ├── customers/
+│   ├── dashboard/
+│   ├── settings/
+│   └── tickets/
+├── routes/
+├── types/
+├── App.tsx
+└── main.tsx
 ```
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+
+- Node.js
+- npm
+- Git
+
+### Clone the repository
+
+```bash
+git clone https://github.com/vsgopika7/SupportFlow.git
+```
+
+### Navigate into the project
+
+```bash
+cd SupportFlow
+```
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Start the development server
+
+```bash
+npm run dev
+```
+
+Open the local URL provided by Vite in your browser.
+
+---
+
+## 🏗️ Production Build
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+To preview the production build locally:
+
+```bash
+npm run preview
+```
+
+---
+
+## ⚡ Performance Optimizations
+
+- Memoized derived data using `useMemo`.
+- Reduced redundant filtering and calculations.
+- Efficient ticket and agent count calculations.
+- Route-based lazy loading.
+- Suspense loading fallback for lazy-loaded pages.
+
+---
+
+## 🔮 Future Enhancements
+
+- Backend API integration
+- Database-based persistence
+- Real-time notifications
+- Advanced analytics
+- Improved ticket reporting
+
+---
+
+## 👩‍💻 Author
+
+**Gopika V**
+
+GitHub: [@vsgopika7](https://github.com/vsgopika7)
+
+---
+
+<p align="center">
+  Built with ❤️ using React and TypeScript
+</p>
